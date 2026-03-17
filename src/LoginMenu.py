@@ -15,5 +15,5 @@ class LoginMenu(Ui):
 
         self.button_test = ctk.CTkButton(frame, text="Youhou")
         
-        frame.place(x=300, y=300)
-        self.button_test.place(x = 30, y= 50)
+        frame.place(relx=0.5, rely=0.5, anchor= ctk.CENTER)
+        self.button_test.place(relx = 0.5, y= 50, anchor= ctk.CENTER)

@@ -8,6 +8,7 @@ class MainMenu(Ui):
         super().__init__()
         self.login_menu = LoginMenu(master=self)
         self.register_menu = RegisterMenu(master=self)
+        
         self.menu()
 
     def menu(self):
@@ -17,7 +18,8 @@ class MainMenu(Ui):
         self.button_login = ctk.CTkButton(self.current_frame, text="login", command=self.login_menu.menu)
         self.button_register = ctk.CTkButton(self.current_frame, text="register", command=self.register_menu.menu) 
 
-        self.button_login.place(x = 30, y = 40)
-        self.button_register.place(x = 30, y = 80)
-        self.current_frame.place(x=300, y=300)
+        self.current_frame.place(relx=0.5, rely=0.5, anchor= ctk.CENTER)
+        self.button_login.place(relx = 0.5, y = 40, anchor= ctk.CENTER)
+        self.button_register.place(relx = 0.5, y = 80, anchor= ctk.CENTER)
+        
 
