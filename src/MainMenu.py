@@ -19,7 +19,7 @@ class MainMenu(Ui):
         self.button_register = ctk.CTkButton(self.current_frame, text="register", command=self.register_menu.menu) 
 
         self.current_frame.place(relx=0.5, rely=0.5, anchor= ctk.CENTER)
-        self.button_login.place(relx = 0.5, y = 40, anchor= ctk.CENTER)
-        self.button_register.place(relx = 0.5, y = 80, anchor= ctk.CENTER)
+        self.button_login.place(relx = 0.5, y = 50, anchor= ctk.CENTER)
+        self.button_register.place(relx = 0.5, y = 100, anchor= ctk.CENTER)
         
 
