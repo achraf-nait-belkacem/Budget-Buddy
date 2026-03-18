@@ -1,7 +1,7 @@
-from src.MainMenu import MainMenu
+from src.App import App
 
 def main():
-    app = MainMenu()
+    app = App()
     app.mainloop()
 
 if __name__ == "__main__":

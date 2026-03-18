@@ -1,10 +1,8 @@
 import customtkinter as ctk
 from src.Ui import Ui
-from src.Auth import Auth
 class RegisterMenu(Ui):
     def __init__(self, master):
         super().__init__()
-        self.auth = Auth()
         self.master = master
         
     def menu(self):
@@ -37,15 +35,15 @@ class RegisterMenu(Ui):
         self.login_button.place(relx = 0.75, y= 230, anchor= ctk.CENTER)
 
     def on_register_click(self):
-        resultat = self.auth.submit_register(self.name, self.last_name, self.email, self.password)
+        resultat = self.master.auth.check_register_errors(self.name, self.last_name, self.email, self.password)
 
         match resultat:
             case "error":
                 self.error_label.configure(text="Please enter correct information")
-            
+                self.master.current_frame.configure(width= 300)
             case "email_special_character_error":
-
                 self.error_label.configure(text="Please enter a correct email")
+                self.master.current_frame.configure(width= 300)
 
             case "password_special_char_error":
                 self.error_label.configure(text="Enter at least one special character in the password")
@@ -58,6 +56,14 @@ class RegisterMenu(Ui):
             case "password_length_error":
                 self.error_label.configure(text="Enter at least a password with 8 or more characters")
                 self.master.current_frame.configure(width= 350)
+
+            case "pasword_num_error":
+                self.error_label.configure(text="Enter at least one number in the password.")
+                self.master.current_frame.configure(width= 350)
+
+            case "success":
+                self.master.user_board_menu.menu()
+                
             case _:
                 self.error_label.configure(text="")
                 self.master.current_frame.configure(width= 300)

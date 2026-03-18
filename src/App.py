@@ -2,13 +2,18 @@ import customtkinter as ctk
 from src.Ui import Ui
 from src.LoginMenu import LoginMenu
 from src.RegisterMenu import RegisterMenu
-
-class MainMenu(Ui):
+from src.Auth import Auth
+from src.UserBoardMenu import UserBoardMenu
+from src.DataManagement import DataManagement
+class App(Ui):
     def __init__(self):
         super().__init__()
-        self.login_menu = LoginMenu(master=self)
-        self.register_menu = RegisterMenu(master=self)
-        
+        self.actual_user = {}
+        self.login_menu = LoginMenu(self)
+        self.register_menu = RegisterMenu(self)
+        self.user_board_menu = UserBoardMenu(self, self.actual_user)
+        self.auth = Auth(self)
+        self.data = DataManagement(self)
         self.menu()
 
     def menu(self):
