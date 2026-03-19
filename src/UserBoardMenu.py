@@ -108,6 +108,7 @@ class UserBoardMenu(Ui):
             account_created_label = ctk.CTkLabel(self.master.current_frame, text="Account created with success !", text_color="green")
             account_created_label.place(relx=0.5, rely=0.9, anchor=ctk.CENTER)
             account_created_label.after(3000, account_created_label.place_forget)
+            self.accounts = self.master.data.get_accounts(self.user["id"])
 
     def hide_account_menu(self):
         self.accounts_label.place_forget()
