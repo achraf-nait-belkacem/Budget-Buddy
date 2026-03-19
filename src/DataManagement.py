@@ -12,6 +12,7 @@ class DataManagement:
                                         )
         self.salt = bcrypt.gensalt()
         self.master = master
+
     def submit_register(self, user_data:dict):
         bytes = user_data["password"].encode("UTF-8")
         hash = bcrypt.hashpw(bytes, self.salt)
@@ -23,9 +24,8 @@ class DataManagement:
 
         self.db.commit()
         submit_register_cursor.close()
-        
-        user_db_infos = self.return_infos(user_data["email"])
-        self.master.actual_user = {"id": user_db_infos[0], "name": user_db_infos[1], "last_name": user_db_infos[2], "email": user_db_infos[3]}
+        self.apply_current_user(user_data)
+        self.create_account(self.master.actual_user["id"])
         
 
     def return_infos(self, user_email):
@@ -51,8 +51,7 @@ class DataManagement:
         hached_password_bytes = hached_password.encode("UTF-8")
 
         if bcrypt.checkpw(bytes, hached_password_bytes):
-            user_db_infos = self.return_infos(user_data["email"])
-            self.master.actual_user = {"id": user_db_infos[0], "name": user_db_infos[1], "last_name": user_db_infos[2], "email": user_db_infos[3]}
+            self.apply_current_user(user_data)
             return True
         else:
             return False
@@ -69,3 +68,40 @@ class DataManagement:
             return False
         else:
             return True
+    
+    def check_max_account(self, id):
+        check_max_account_cursor = self.db.cursor(buffered=True)
+        request = "SELECT COUNT(*) FROM account WHERE user_id = %(id)s"
+        check_max_account_cursor.execute(request, {"id": id})
+        fetch = check_max_account_cursor.fetchone()
+        check_max_account_cursor.close()
+
+        number_of_accounts = fetch[0]
+
+        if number_of_accounts >= 3:
+            return True
+        else:
+            return False
+
+    def create_account(self, id):
+        if self.check_max_account(id):
+            return True
+        else : 
+            create_account_cursor = self.db.cursor(buffered=True)
+            request = "INSERT INTO account(user_id, funds) VALUES(%(id)s, 0)"
+            create_account_cursor.execute(request, {"id": id})
+            self.db.commit()
+            create_account_cursor.close()
+
+    def apply_current_user(self, user_data):
+        user_db_infos = self.return_infos(user_data["email"])
+        self.master.actual_user = {"id": user_db_infos[0], "name": user_db_infos[1], "last_name": user_db_infos[2], "email": user_db_infos[3]}
+
+    def get_accounts(self, user_id):
+        get_accounts_cursor = self.db.cursor()
+        request = "SELECT * FROM account WHERE user_id = %(user_id)s ORDER BY id ASC"
+        get_accounts_cursor.execute(request, {"user_id": user_id})
+
+        accounts_list = get_accounts_cursor.fetchall()
+        get_accounts_cursor.close()
+        return accounts_list

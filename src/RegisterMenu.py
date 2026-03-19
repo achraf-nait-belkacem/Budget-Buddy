@@ -1,5 +1,7 @@
 import customtkinter as ctk
 from src.Ui import Ui
+from src.UserBoardMenu import UserBoardMenu
+
 class RegisterMenu(Ui):
     def __init__(self, master):
         super().__init__()
@@ -62,7 +64,8 @@ class RegisterMenu(Ui):
                 self.master.current_frame.configure(width= 350)
 
             case "success":
-                self.master.user_board_menu.menu()
+                self.user_board_menu = UserBoardMenu(self.master, self.master.actual_user)
+                self.user_board_menu.menu()
                 
             case _:
                 self.error_label.configure(text="")
