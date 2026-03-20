@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from src.Ui import Ui
+from src.UserBoardMenu import UserBoardMenu
 
 class LoginMenu(Ui):
     def __init__(self, master):
@@ -21,8 +22,8 @@ class LoginMenu(Ui):
         
         frame.place(relx=0.5, rely=0.5, anchor= ctk.CENTER)
         self.error_label.place(relx=0.5, rely=0.1, anchor=ctk.CENTER)
-        self.email.place(relx = 0.5, y=60, anchor=ctk.CENTER)
-        self.password.place(relx = 0.5, y = 95, anchor=ctk.CENTER)
+        self.email.place(relx = 0.5, y=50, anchor=ctk.CENTER)
+        self.password.place(relx = 0.5, y = 85, anchor=ctk.CENTER)
         self.btn_submit.place(relx = 0.25, y= 130, anchor= ctk.CENTER)
         self.btn_register.place(relx = 0.75, y= 130, anchor= ctk.CENTER)
 
@@ -43,7 +44,8 @@ class LoginMenu(Ui):
                 self.master.current_frame.configure(width= 350)
 
             case "success":
-                self.master.user_board_menu.menu()
+                self.user_board_menu = UserBoardMenu(self.master, self.master.actual_user)
+                self.user_board_menu.menu()
                 
             case _:
                 self.error_label.configure(text="")

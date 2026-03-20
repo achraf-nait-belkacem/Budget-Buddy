@@ -19,7 +19,7 @@ class Auth:
             if not user_infos["password"].isalnum():
                 if "@" in user_infos["email"]:
                     if any(k.isupper() for k in user_infos["password"]):
-                        if len(user_infos["password"]) > 8:
+                        if len(user_infos["password"]) >= 10:
                             if any(char.isdigit() for char in user_infos["password"]):
                                 self.master.data.submit_register(user_infos)
                                 return "success"
