@@ -105,3 +105,19 @@ class DataManagement:
         accounts_list = get_accounts_cursor.fetchall()
         get_accounts_cursor.close()
         return accounts_list
+
+    def update_account_funds(self, account_id, new_balance):
+        update_account_cursor = self.db.cursor()
+        request = "UPDATE account SET funds = %(new_balance)s WHERE id = %(account_id)s"
+
+        update_account_cursor.execute(request, {"new_balance" : new_balance, "account_id": account_id})
+        self.db.commit()
+        update_account_cursor.close()
+
+    def create_transaction(self, transaction_data):
+        create_transaction_cursor = self.db.cursor()
+        request = "INSERT INTO transaction (description, amount, date, type, category, account_id) VALUES (%(description)s, %(amount)s, %(date)s, %(type)s, %(category)s, %(account_id)s)"
+
+        create_transaction_cursor.execute(request, transaction_data)
+        self.db.commit()
+        create_transaction_cursor.close()

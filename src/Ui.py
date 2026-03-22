@@ -11,6 +11,3 @@ class Ui(ctk.CTk):
         if self.current_frame is not None:
             self.current_frame.destroy()
             self.current_frame = None
-
-    def menu(self):
-        pass
