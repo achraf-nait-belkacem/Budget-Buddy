@@ -1,14 +1,19 @@
 import mysql.connector
 import bcrypt
+import os
+from pathlib import Path
+from dotenv import load_dotenv
 
 class DataManagement:
     def __init__(self, master):
+        load_dotenv()
+
         self.db = mysql.connector.connect(
-                                            host = "localhost",
-                                            user = "root",
-                                            password = "Metallica13!",
-                                            database = "budget_buddy",
-                                            port = 3308
+                                            host = os.getenv("DB_HOST", "localhost"),
+                                            user = os.getenv("DB_USER"),
+                                            password = os.getenv("DB_PASSWORD"),
+                                            database = os.getenv("DB_NAME"),
+                                            port = int(os.getenv("DB_PORT", "3306"))
                                         )
         self.salt = bcrypt.gensalt()
         self.master = master
