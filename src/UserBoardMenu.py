@@ -25,10 +25,10 @@ class UserBoardMenu:
         self.graphic_frame = ctk.CTkFrame(self.master, width=480, height=280)
         self.transaction_menu_frame = ctk.CTkFrame(self.transaction_frame, width=460, height=220, fg_color="transparent")
 
-        self.btn_withdraw = ctk.CTkButton(self.transaction_frame, text="Withdraw", command=self.on_click_withdraw)
-        self.btn_deposit = ctk.CTkButton(self.transaction_frame, text="Deposit", command=self.on_click_deposit)
-        self.btn_transaction = ctk.CTkButton(self.transaction_frame, text="Transaction", command=self.on_click_transaction)
-        self.btn_quit = ctk.CTkButton(self.transaction_menu_frame, text="Quit", command=self.on_click_quit)
+        self.btn_withdraw = ctk.CTkButton(self.transaction_frame, text="Withdraw", command=self.on_withdraw_click)
+        self.btn_deposit = ctk.CTkButton(self.transaction_frame, text="Deposit", command=self.on_deposit_click)
+        self.btn_transaction = ctk.CTkButton(self.transaction_frame, text="Transfer", command=self.on_transfer_click)
+        self.btn_quit = ctk.CTkButton(self.transaction_menu_frame, text="Quit", command=self.on_quit_click)
 
         self.accounts_label = ctk.CTkLabel(self.transaction_frame, text=f"Actual account : {self.current_account_label}")
         self.funds_label = ctk.CTkLabel(self.transaction_frame, text=f"Actual funds : {self.actual_account[2]}")
@@ -43,6 +43,13 @@ class UserBoardMenu:
         self.desc = ctk.CTkEntry(self.transaction_menu_frame, placeholder_text="Enter a description")
         self.btn_validate = ctk.CTkButton(self.transaction_menu_frame, text="")
         self.amount_entry = ctk.CTkEntry(self.transaction_menu_frame, placeholder_text="Amount* (ex: 50.00)")
+        
+        self.transfer_label_from = ctk.CTkLabel(self.transaction_menu_frame, text="")
+        self.transfer_label_to = ctk.CTkLabel(self.transaction_menu_frame, text="")
+        self.transfer_from_options = ctk.CTkOptionMenu(self.transaction_menu_frame, values=["first account", "second account", "third account"])
+        self.transfer_from_options.set("Select an account")
+        self.transfer_to_options = ctk.CTkOptionMenu(self.transaction_menu_frame, values=["first account", "second account", "third account"])
+        self.transfer_to_options.set("Select an account")
 
         self.master.current_frame.place(relx=0.195, rely=0.5, anchor= ctk.CENTER)
         self.transaction_frame.place(relx=0.695, rely=0.75, anchor=ctk.CENTER)
@@ -58,7 +65,7 @@ class UserBoardMenu:
         self.btn_change_account.place(relx = 0.65, rely = 0.3, anchor= ctk.CENTER)
         self.btn_create_account.place(relx = 0.35, rely = 0.3, anchor = ctk.CENTER)
 
-    def on_click_withdraw(self):
+    def on_withdraw_click(self):
         self.btn_withdraw.configure(state="disabled")
         self.btn_deposit.configure(state="normal")
         self.btn_transaction.configure(state="normal")
@@ -66,6 +73,7 @@ class UserBoardMenu:
         self.transaction_menu_frame.configure(fg_color="gray20")
         self.btn_quit.place(relx=0.5, rely= 0.9, anchor=ctk.CENTER)
         self.hide_account_menu()
+        self.hide_account_sub_menu()
 
         self.transaction_label.configure(text="Withdraw menu")
         self.transaction_label.place(relx=0.5, rely=0.2, anchor=ctk.CENTER)
@@ -75,7 +83,7 @@ class UserBoardMenu:
         self.btn_validate.configure(command=self.on_withdraw_validate_click, text="Confirm withdraw")
         self.btn_validate.place(relx=0.5, rely=0.7, anchor=ctk.CENTER)
 
-    def on_click_deposit(self):
+    def on_deposit_click(self):
         self.btn_deposit.configure(state="disabled")
         self.btn_withdraw.configure(state="normal")
         self.btn_transaction.configure(state="normal")
@@ -83,6 +91,7 @@ class UserBoardMenu:
         self.transaction_menu_frame.configure(fg_color="gray20")
         self.btn_quit.place(relx=0.5, rely= 0.9, anchor=ctk.CENTER)
         self.hide_account_menu()
+        self.hide_account_sub_menu()
 
         self.transaction_label.configure(text="Deposit menu")
         self.transaction_label.place(relx=0.5, rely=0.2, anchor=ctk.CENTER)
@@ -93,7 +102,7 @@ class UserBoardMenu:
         self.btn_validate.place(relx=0.5, rely=0.7, anchor=ctk.CENTER)
         
 
-    def on_click_transaction(self):
+    def on_transfer_click(self):
         self.btn_transaction.configure(state="disabled")
         self.btn_withdraw.configure(state="normal")
         self.btn_deposit.configure(state="normal")
@@ -101,8 +110,20 @@ class UserBoardMenu:
         self.transaction_menu_frame.configure(fg_color="gray20")
         self.btn_quit.place(relx=0.5, rely= 0.9, anchor=ctk.CENTER)
         self.hide_account_menu()
+        self.hide_account_sub_menu()
 
-    def on_click_quit(self):
+        self.transfer_label_from.place(relx= 0.1, rely= 0.2, anchor=ctk.CENTER)
+        self.transfer_from_options.place(relx= 0.2, rely= 0.2, anchor=ctk.CENTER)
+        self.transfer_label_to.place(relx= 0.45, rely= 0.2, anchor=ctk.CENTER)
+        self.transfer_to_options.place(relx= 0.50, rely= 0.2, anchor=ctk.CENTER)
+        self.category_option.place(relx=0.6, rely=0.45, anchor=ctk.CENTER)
+        self.desc.place(relx= 0.3, rely= 0.3, anchor=ctk.CENTER)
+        self.amount_entry.place(relx=0.3, rely=0.6, anchor=ctk.CENTER)
+        self.btn_validate.configure(command=self.on_transfer_validate_click, text="Confirm transfer")
+        self.btn_validate.place(relx=0.5, rely=0.7, anchor=ctk.CENTER)
+
+
+    def on_quit_click(self):
         self.btn_transaction.configure(state="normal")
         self.btn_withdraw.configure(state="normal")
         self.btn_deposit.configure(state="normal")
@@ -115,12 +136,8 @@ class UserBoardMenu:
         self.btn_create_account.place(relx = 0.35, rely = 0.3, anchor = ctk.CENTER)
         self.btn_change_account.place(relx = 0.65, rely = 0.3, anchor= ctk.CENTER)
 
-        self.transaction_label.place_forget()
-        self.category_option.place_forget()
-        self.desc.place_forget()
-        self.amount_entry.place_forget()
-        self.btn_validate.place_forget()
-    
+        self.hide_account_sub_menu()
+
     def on_click_change_account(self):
         self.current_account_index += 1
         self.current_account_label += 1
@@ -152,6 +169,17 @@ class UserBoardMenu:
         self.funds_label.place_forget()
         self.btn_create_account.place_forget()
         self.btn_change_account.place_forget()
+
+    def hide_account_sub_menu(self):
+        self.transaction_label.place_forget()
+        self.category_option.place_forget()
+        self.desc.place_forget()
+        self.amount_entry.place_forget()
+        self.btn_validate.place_forget()
+        self.transfer_label_from.place_forget()
+        self.transfer_label_to.place_forget()
+        self.transfer_from_options.place_forget()
+        self.transfer_to_options.place_forget()
 
     def on_withdraw_validate_click(self):
         result = self.master.transaction.check_withdraw(self.desc.get(), self.amount_entry.get(), self.category_option.get(), "withdraw", self.actual_account)
@@ -201,6 +229,36 @@ class UserBoardMenu:
                 self.error_label.configure(text_color = "green", text = "Your deposit has been completed !")
                 self.error_label.after(3000, self.error_label.place_forget)
 
+            case _:
+                self.error_label.configure(text_color = "red", text="")
+                self.master.current_frame.configure(width= 300)
+
+    def on_transfer_validate_click(self):
+        result = self.master.transaction.check_transfer(self.desc.get(), self.amount_entry.get(), self.category_option.get(), "transaction", self.actual_account, self.transfer_from_options.get(), self.transfer_to_options.get(), self.accounts)
+
+        match result:
+            case "missing_fields":
+                self.error_label.configure(text_color = "red", text="There is missing fields. Please try again.")
+                self.error_label.after(3000, self.error_label.place_forget)
+
+            case "same_account":
+                self.error_label.configure(text_color = "red", text="You can't select the same account.")
+                self.error_label.after(3000, self.error_label.place_forget)
+
+            case "invalid_amount":
+                self.error_label.configure(text_color = "red", text="The amount you entered is invalid. Please try again")
+                self.error_label.after(3000, self.error_label.place_forget)
+
+            case "not_enough_money":
+                self.error_label.configure(text_color = "red", text="Your account doesn't have enough money.")
+                self.error_label.after(3000, self.error_label.place_forget)
+                
+            case "success":
+                self.accounts = self.master.data.get_accounts(self.user["id"])
+                self.actual_account = self.accounts[self.current_account_index]
+                self.funds_label.configure(text=f"Actual funds : {self.actual_account[2]}")
+                self.error_label.configure(text_color = "green", text = "Your transfer has been completed !")
+                self.error_label.after(3000, self.error_label.place_forget)
             case _:
                 self.error_label.configure(text_color = "red", text="")
                 self.master.current_frame.configure(width= 300)
