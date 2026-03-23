@@ -17,10 +17,6 @@ class DataManagement:
         self.master = master
 
     def create_user(self, user_data: dict):
-        """
-        Creates a user row from raw user_data coming from the UI/auth layer.
-        Hashes the password using a fresh bcrypt salt per registration.
-        """
         bytes = user_data["password"].encode("UTF-8")
         password_hash = bcrypt.hashpw(bytes, bcrypt.gensalt())
         user_data["password"] = password_hash
@@ -135,11 +131,6 @@ class DataManagement:
         create_transaction_cursor.close()
 
     def get_transactions(self, account_id: int):
-        """
-        Returns transaction rows for a given account, newest first.
-        Each row is:
-        (id, date, type, category, amount, description)
-        """
         cursor = self.db.cursor(buffered=True)
         request = """
             SELECT id, date, type, category, amount, description
