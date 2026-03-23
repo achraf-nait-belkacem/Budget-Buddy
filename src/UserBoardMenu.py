@@ -73,7 +73,7 @@ class UserBoardMenu:
         self.desc.place(relx= 0.3, rely= 0.3, anchor=ctk.CENTER)
         self.amount_entry.place(relx=0.3, rely=0.6, anchor=ctk.CENTER)
         self.btn_validate.configure(command=self.on_withdraw_validate_click, text="Confirm withdraw")
-        self.btn_validate.place(relx=0.5, rely=0.7, anchor=ctk.CENTER)
+        self.btn_validate.place(relx=0.3, rely=0.7, anchor=ctk.CENTER)
 
     def on_click_deposit(self):
         self.btn_deposit.configure(state="disabled")
@@ -90,7 +90,7 @@ class UserBoardMenu:
         self.desc.place(relx= 0.3, rely= 0.3, anchor=ctk.CENTER)
         self.amount_entry.place(relx=0.3, rely=0.6, anchor=ctk.CENTER)
         self.btn_validate.configure(command=self.on_deposit_validate_click, text="Confirm deposit")
-        self.btn_validate.place(relx=0.5, rely=0.7, anchor=ctk.CENTER)
+        self.btn_validate.place(relx=0.3, rely=0.7, anchor=ctk.CENTER)
         
 
     def on_click_transaction(self):
