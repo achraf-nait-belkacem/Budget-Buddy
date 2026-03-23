@@ -311,6 +311,7 @@ class UserBoardMenu:
                 self.accounts = self.master.data.get_accounts(self.user["id"])
                 self.actual_account = self.accounts[self.current_account_index]
                 self.funds_label.configure(text=f"Actual funds : {self.actual_account[2]}")
+                self.load_transaction_history()
                 self.error_label.configure(text_color = "green", text = "Your transfer has been completed !")
                 self.error_label.after(3000, self.error_label.place_forget)
             case _:
