@@ -1,14 +1,19 @@
 import mysql.connector
 import bcrypt
+import os
+from pathlib import Path
+from dotenv import load_dotenv
 
 class DataManagement:
     def __init__(self, master):
+        load_dotenv()
+
         self.db = mysql.connector.connect(
-                                            host = "localhost",
-                                            user = "root",
-                                            password = "Root0",
-                                            database = "budget_buddy",
-                                            port = 3306
+                                            host = os.getenv("DB_HOST", "localhost"),
+                                            user = os.getenv("DB_USER"),
+                                            password = os.getenv("DB_PASSWORD"),
+                                            database = os.getenv("DB_NAME"),
+                                            port = int(os.getenv("DB_PORT", "3306"))
                                         )
         self.master = master
 
@@ -129,3 +134,21 @@ class DataManagement:
         create_transaction_cursor.execute(request, transaction_data)
         self.db.commit()
         create_transaction_cursor.close()
+
+    def get_transactions(self, account_id: int):
+        """
+        Returns transaction rows for a given account, newest first.
+        Each row is:
+        (id, date, type, category, amount, description)
+        """
+        cursor = self.db.cursor(buffered=True)
+        request = """
+            SELECT id, date, type, category, amount, description
+            FROM transaction
+            WHERE account_id = %(account_id)s
+            ORDER BY date DESC, id DESC
+        """
+        cursor.execute(request, {"account_id": account_id})
+        rows = cursor.fetchall()
+        cursor.close()
+        return rows
