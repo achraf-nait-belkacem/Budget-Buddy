@@ -16,7 +16,7 @@ class LoginMenu:
         self.error_label = ctk.CTkLabel(frame, text="", text_color="red")
         self.email = ctk.CTkEntry(frame, placeholder_text="Enter your email")
         self.password = ctk.CTkEntry(frame, placeholder_text="Enter your password")
-        self.btn_submit = ctk.CTkButton(frame, text="Login", command= self.on_login_click)
+        self.btn_submit = ctk.CTkButton(frame, text="Submit", command= self.on_login_click)
         self.btn_register = ctk.CTkButton(frame, text="Register", command=self.master.register_menu.menu)
         
         frame.place(relx=0.5, rely=0.5, anchor= ctk.CENTER)

@@ -23,7 +23,7 @@ class RegisterMenu:
 
         self.error_label = ctk.CTkLabel(frame, text="", text_color="red")
 
-        self.button_post = ctk.CTkButton(frame, text="Register", command= self.on_register_click)
+        self.button_post = ctk.CTkButton(frame, text="Submit", command= self.on_register_click)
         self.login_button = ctk.CTkButton(frame, text="Login", command=self.master.login_menu.menu )
 
         frame.place(relx=0.5, rely=0.5, anchor=ctk.CENTER)

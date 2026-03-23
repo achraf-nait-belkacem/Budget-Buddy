@@ -100,7 +100,7 @@ class UserBoardMenu:
         self.category_option.place(relx=0.85, rely=0.55, anchor=ctk.CENTER)
         self.desc.place(relx= 0.5, rely= 0.55, anchor=ctk.CENTER)
         self.amount_entry.place(relx=0.15, rely=0.55, anchor=ctk.CENTER)
-        self.btn_validate.configure(command=self.on_transfer_validate_click, text="Confirm withdraw")
+        self.btn_validate.configure(command=self.on_withdraw_validate_click, text="Confirm withdraw")
         self.btn_validate.place(relx=0.5, rely=0.75, anchor=ctk.CENTER)
 
     def on_deposit_click(self):
@@ -118,7 +118,7 @@ class UserBoardMenu:
         self.category_option.place(relx=0.85, rely=0.55, anchor=ctk.CENTER)
         self.desc.place(relx= 0.5, rely= 0.55, anchor=ctk.CENTER)
         self.amount_entry.place(relx=0.15, rely=0.55, anchor=ctk.CENTER)
-        self.btn_validate.configure(command=self.on_transfer_validate_click, text="Confirm deposit")
+        self.btn_validate.configure(command=self.on_deposit_validate_click, text="Confirm deposit")
         self.btn_validate.place(relx=0.5, rely=0.75, anchor=ctk.CENTER)
         
 
