@@ -23,6 +23,9 @@ class UserBoardMenu:
         self.master.current_frame = ctk.CTkFrame(self.master, width= 300, height= 590)
         self.transaction_frame = ctk.CTkFrame(self.master, width=480, height=280)
         self.graphic_frame = ctk.CTkFrame(self.master, width=480, height=280)
+        self.transactions_header = ctk.CTkLabel(self.master.current_frame, text="Transactions", text_color="white")
+        self.graphic_header = ctk.CTkLabel(self.graphic_frame, text="Graphic", text_color="white")
+        self.graphic_placeholder = ctk.CTkLabel(self.graphic_frame, text="Charts coming soon", text_color="white")
         self.transaction_menu_frame = ctk.CTkFrame(self.transaction_frame, width=460, height=220, fg_color="transparent")
 
         self.btn_withdraw = ctk.CTkButton(self.transaction_frame, text="Withdraw", command=self.on_withdraw_click)
@@ -56,6 +59,27 @@ class UserBoardMenu:
         self.graphic_frame.place(relx=0.695, rely=0.245, anchor=ctk.CENTER)
         self.transaction_menu_frame.place(relx=0.5, rely=0.57, anchor=ctk.CENTER)
 
+        self.transactions_header.place(relx=0.5, rely=0.05, anchor=ctk.CENTER)
+        self.graphic_header.place(relx=0.5, rely=0.05, anchor=ctk.CENTER)
+        self.graphic_placeholder.place(relx=0.5, rely=0.55, anchor=ctk.CENTER)
+
+        self.transactions_history_box = ctk.CTkTextbox(
+            self.master.current_frame,
+            width=260,
+            height=470
+        )
+        self.transactions_history_box.configure(state="disabled")
+        self.transactions_history_box.place(relx=0.5, rely=0.55, anchor=ctk.CENTER)
+
+        self.transaction_label.configure(text="Select Withdraw or Deposit")
+        self.transaction_label.place(relx=0.5, rely=0.2, anchor=ctk.CENTER)
+        self.category_option.place_forget()
+        self.desc.place_forget()
+        self.amount_entry.place_forget()
+        self.btn_validate.place_forget()
+
+        self.load_transaction_history()
+
         self.btn_withdraw.place(relx=0.20, rely= 0.1, anchor=ctk.CENTER)
         self.btn_deposit.place(relx=0.50, rely= 0.1, anchor=ctk.CENTER)
         self.btn_transaction.place(relx=0.80, rely= 0.1, anchor=ctk.CENTER)
@@ -81,7 +105,7 @@ class UserBoardMenu:
         self.desc.place(relx= 0.3, rely= 0.3, anchor=ctk.CENTER)
         self.amount_entry.place(relx=0.3, rely=0.6, anchor=ctk.CENTER)
         self.btn_validate.configure(command=self.on_withdraw_validate_click, text="Confirm withdraw")
-        self.btn_validate.place(relx=0.5, rely=0.7, anchor=ctk.CENTER)
+        self.btn_validate.place(relx=0.3, rely=0.7, anchor=ctk.CENTER)
 
     def on_deposit_click(self):
         self.btn_deposit.configure(state="disabled")
@@ -99,7 +123,7 @@ class UserBoardMenu:
         self.desc.place(relx= 0.3, rely= 0.3, anchor=ctk.CENTER)
         self.amount_entry.place(relx=0.3, rely=0.6, anchor=ctk.CENTER)
         self.btn_validate.configure(command=self.on_deposit_validate_click, text="Confirm deposit")
-        self.btn_validate.place(relx=0.5, rely=0.7, anchor=ctk.CENTER)
+        self.btn_validate.place(relx=0.3, rely=0.7, anchor=ctk.CENTER)
         
 
     def on_transfer_click(self):
@@ -149,6 +173,7 @@ class UserBoardMenu:
         self.actual_account = self.accounts[self.current_account_index]
         self.accounts_label.configure(text=f"Actual account : {self.current_account_label}")
         self.funds_label.configure(text=f"Actual funds : {self.actual_account[2]}")
+        self.load_transaction_history()
         
         
 
@@ -163,10 +188,11 @@ class UserBoardMenu:
             account_created_label.place(relx=0.5, rely=0.6, anchor=ctk.CENTER)
             account_created_label.after(3000, account_created_label.place_forget)
             self.accounts = self.master.data.get_accounts(self.user["id"])
+            self.actual_account = self.accounts[self.current_account_index]
+            self.funds_label.configure(text=f"Actual funds : {self.actual_account[2]}")
+            self.load_transaction_history()
 
     def hide_account_menu(self):
-        self.accounts_label.place_forget()
-        self.funds_label.place_forget()
         self.btn_create_account.place_forget()
         self.btn_change_account.place_forget()
 
@@ -180,6 +206,32 @@ class UserBoardMenu:
         self.transfer_label_to.place_forget()
         self.transfer_from_options.place_forget()
         self.transfer_to_options.place_forget()
+
+    def load_transaction_history(self):
+        if not hasattr(self, "transactions_history_box"):
+            return
+
+        account_id = self.actual_account[0]
+        transactions = self.master.data.get_transactions(account_id)
+
+        self.transactions_history_box.configure(state="normal")
+        self.transactions_history_box.delete("1.0", "end")
+
+        if not transactions:
+            self.transactions_history_box.insert("end", "No transactions yet.\n")
+        else:
+            for tx_id, tx_date, tx_type, tx_category, tx_amount, tx_description in transactions:
+                delta = -tx_amount if tx_type == "withdraw" else tx_amount
+                description = tx_description if tx_description else ""
+
+                self.transactions_history_box.insert(
+                    "end",
+                    f"{tx_date} | {tx_type:<9} | {delta:+.2f} | {tx_category}\n"
+                )
+                if description:
+                    self.transactions_history_box.insert("end", f"  {description}\n")
+
+        self.transactions_history_box.configure(state="disabled")
 
     def on_withdraw_validate_click(self):
         result = self.master.transaction.check_withdraw(self.desc.get(), self.amount_entry.get(), self.category_option.get(), "withdraw", self.actual_account)
@@ -202,6 +254,7 @@ class UserBoardMenu:
                 self.accounts = self.master.data.get_accounts(self.user["id"])
                 self.actual_account = self.accounts[self.current_account_index]
                 self.funds_label.configure(text=f"Actual funds : {self.actual_account[2]}")
+                self.load_transaction_history()
                 self.error_label.configure(text_color = "green", text = "Your withdraw has been completed !")
                 self.error_label.after(3000, self.error_label.place_forget)
 
@@ -226,6 +279,7 @@ class UserBoardMenu:
                 self.accounts = self.master.data.get_accounts(self.user["id"])
                 self.actual_account = self.accounts[self.current_account_index]
                 self.funds_label.configure(text=f"Actual funds : {self.actual_account[2]}")
+                self.load_transaction_history()
                 self.error_label.configure(text_color = "green", text = "Your deposit has been completed !")
                 self.error_label.after(3000, self.error_label.place_forget)
 

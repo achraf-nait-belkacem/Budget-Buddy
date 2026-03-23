@@ -14,20 +14,28 @@ class DataManagement:
                                             database = os.getenv("DB_NAME"),
                                             port = int(os.getenv("DB_PORT", "3306"))
                                         )
-        self.salt = bcrypt.gensalt()
         self.master = master
 
-    def submit_register(self, user_data:dict):
+    def create_user(self, user_data: dict):
+        """
+        Creates a user row from raw user_data coming from the UI/auth layer.
+        Hashes the password using a fresh bcrypt salt per registration.
+        """
         bytes = user_data["password"].encode("UTF-8")
-        hash = bcrypt.hashpw(bytes, self.salt)
-        user_data["password"] = hash
+        password_hash = bcrypt.hashpw(bytes, bcrypt.gensalt())
+        user_data["password"] = password_hash
 
-        submit_register_cursor = self.db.cursor()
-        create_user = "INSERT INTO user(name, last_name, email, password) VALUES(%(name)s, %(last_name)s, %(email)s, %(password)s)"
-        submit_register_cursor.execute(create_user, user_data)
-
+        create_user_cursor = self.db.cursor()
+        create_user = (
+            "INSERT INTO user(name, last_name, email, password) "
+            "VALUES(%(name)s, %(last_name)s, %(email)s, %(password)s)"
+        )
+        create_user_cursor.execute(create_user, user_data)
         self.db.commit()
-        submit_register_cursor.close()
+        create_user_cursor.close()
+
+    def submit_register(self, user_data:dict):
+        self.create_user(user_data)
         self.apply_current_user(user_data)
         self.create_account(self.master.actual_user["id"])
         
@@ -125,3 +133,21 @@ class DataManagement:
         create_transaction_cursor.execute(request, transaction_data)
         self.db.commit()
         create_transaction_cursor.close()
+
+    def get_transactions(self, account_id: int):
+        """
+        Returns transaction rows for a given account, newest first.
+        Each row is:
+        (id, date, type, category, amount, description)
+        """
+        cursor = self.db.cursor(buffered=True)
+        request = """
+            SELECT id, date, type, category, amount, description
+            FROM transaction
+            WHERE account_id = %(account_id)s
+            ORDER BY date DESC, id DESC
+        """
+        cursor.execute(request, {"account_id": account_id})
+        rows = cursor.fetchall()
+        cursor.close()
+        return rows
