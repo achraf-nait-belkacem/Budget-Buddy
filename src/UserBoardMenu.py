@@ -47,8 +47,8 @@ class UserBoardMenu:
         self.btn_validate = ctk.CTkButton(self.transaction_menu_frame, text="")
         self.amount_entry = ctk.CTkEntry(self.transaction_menu_frame, placeholder_text="Amount* (ex: 50.00)")
         
-        self.transfer_label_from = ctk.CTkLabel(self.transaction_menu_frame, text="")
-        self.transfer_label_to = ctk.CTkLabel(self.transaction_menu_frame, text="")
+        self.transfer_label_from = ctk.CTkLabel(self.transaction_menu_frame, text="From")
+        self.transfer_label_to = ctk.CTkLabel(self.transaction_menu_frame, text="to")
         self.transfer_from_options = ctk.CTkOptionMenu(self.transaction_menu_frame, values=["first account", "second account", "third account"])
         self.transfer_from_options.set("Select an account")
         self.transfer_to_options = ctk.CTkOptionMenu(self.transaction_menu_frame, values=["first account", "second account", "third account"])
@@ -68,22 +68,18 @@ class UserBoardMenu:
             width=260,
             height=470
         )
+
         self.transactions_history_box.configure(state="disabled")
         self.transactions_history_box.place(relx=0.5, rely=0.55, anchor=ctk.CENTER)
 
         self.transaction_label.configure(text="Select Withdraw or Deposit")
         self.transaction_label.place(relx=0.5, rely=0.2, anchor=ctk.CENTER)
-        self.category_option.place_forget()
-        self.desc.place_forget()
-        self.amount_entry.place_forget()
-        self.btn_validate.place_forget()
 
         self.load_transaction_history()
 
         self.btn_withdraw.place(relx=0.20, rely= 0.1, anchor=ctk.CENTER)
         self.btn_deposit.place(relx=0.50, rely= 0.1, anchor=ctk.CENTER)
         self.btn_transaction.place(relx=0.80, rely= 0.1, anchor=ctk.CENTER)
-
         self.accounts_label.place(relx = 0.35,rely = 0.2, anchor = ctk.CENTER)
         self.funds_label.place(relx = 0.65,rely = 0.2, anchor = ctk.CENTER)
         self.btn_change_account.place(relx = 0.65, rely = 0.3, anchor= ctk.CENTER)
@@ -101,11 +97,11 @@ class UserBoardMenu:
 
         self.transaction_label.configure(text="Withdraw menu")
         self.transaction_label.place(relx=0.5, rely=0.2, anchor=ctk.CENTER)
-        self.category_option.place(relx=0.6, rely=0.45, anchor=ctk.CENTER)
-        self.desc.place(relx= 0.3, rely= 0.3, anchor=ctk.CENTER)
-        self.amount_entry.place(relx=0.3, rely=0.6, anchor=ctk.CENTER)
-        self.btn_validate.configure(command=self.on_withdraw_validate_click, text="Confirm withdraw")
-        self.btn_validate.place(relx=0.3, rely=0.7, anchor=ctk.CENTER)
+        self.category_option.place(relx=0.85, rely=0.55, anchor=ctk.CENTER)
+        self.desc.place(relx= 0.5, rely= 0.55, anchor=ctk.CENTER)
+        self.amount_entry.place(relx=0.15, rely=0.55, anchor=ctk.CENTER)
+        self.btn_validate.configure(command=self.on_transfer_validate_click, text="Confirm withdraw")
+        self.btn_validate.place(relx=0.5, rely=0.75, anchor=ctk.CENTER)
 
     def on_deposit_click(self):
         self.btn_deposit.configure(state="disabled")
@@ -119,11 +115,11 @@ class UserBoardMenu:
 
         self.transaction_label.configure(text="Deposit menu")
         self.transaction_label.place(relx=0.5, rely=0.2, anchor=ctk.CENTER)
-        self.category_option.place(relx=0.6, rely=0.45, anchor=ctk.CENTER)
-        self.desc.place(relx= 0.3, rely= 0.3, anchor=ctk.CENTER)
-        self.amount_entry.place(relx=0.3, rely=0.6, anchor=ctk.CENTER)
-        self.btn_validate.configure(command=self.on_deposit_validate_click, text="Confirm deposit")
-        self.btn_validate.place(relx=0.3, rely=0.7, anchor=ctk.CENTER)
+        self.category_option.place(relx=0.85, rely=0.55, anchor=ctk.CENTER)
+        self.desc.place(relx= 0.5, rely= 0.55, anchor=ctk.CENTER)
+        self.amount_entry.place(relx=0.15, rely=0.55, anchor=ctk.CENTER)
+        self.btn_validate.configure(command=self.on_transfer_validate_click, text="Confirm deposit")
+        self.btn_validate.place(relx=0.5, rely=0.75, anchor=ctk.CENTER)
         
 
     def on_transfer_click(self):
@@ -136,15 +132,16 @@ class UserBoardMenu:
         self.hide_account_menu()
         self.hide_account_sub_menu()
 
-        self.transfer_label_from.place(relx= 0.1, rely= 0.2, anchor=ctk.CENTER)
-        self.transfer_from_options.place(relx= 0.2, rely= 0.2, anchor=ctk.CENTER)
-        self.transfer_label_to.place(relx= 0.45, rely= 0.2, anchor=ctk.CENTER)
-        self.transfer_to_options.place(relx= 0.50, rely= 0.2, anchor=ctk.CENTER)
-        self.category_option.place(relx=0.6, rely=0.45, anchor=ctk.CENTER)
-        self.desc.place(relx= 0.3, rely= 0.3, anchor=ctk.CENTER)
-        self.amount_entry.place(relx=0.3, rely=0.6, anchor=ctk.CENTER)
+        self.transaction_label.configure(text="Transfer menu")
+        self.transfer_label_from.place(relx= 0.1, rely= 0.3, anchor=ctk.CENTER)
+        self.transfer_from_options.place(relx= 0.3, rely= 0.3, anchor=ctk.CENTER)
+        self.transfer_label_to.place(relx= 0.5, rely= 0.3, anchor=ctk.CENTER)
+        self.transfer_to_options.place(relx= 0.7, rely= 0.3, anchor=ctk.CENTER)
+        self.category_option.place(relx=0.85, rely=0.55, anchor=ctk.CENTER)
+        self.desc.place(relx= 0.5, rely= 0.55, anchor=ctk.CENTER)
+        self.amount_entry.place(relx=0.15, rely=0.55, anchor=ctk.CENTER)
         self.btn_validate.configure(command=self.on_transfer_validate_click, text="Confirm transfer")
-        self.btn_validate.place(relx=0.5, rely=0.7, anchor=ctk.CENTER)
+        self.btn_validate.place(relx=0.5, rely=0.75, anchor=ctk.CENTER)
 
 
     def on_quit_click(self):
@@ -195,6 +192,8 @@ class UserBoardMenu:
     def hide_account_menu(self):
         self.btn_create_account.place_forget()
         self.btn_change_account.place_forget()
+        self.accounts_label.place_forget()
+        self.funds_label.place_forget()
 
     def hide_account_sub_menu(self):
         self.transaction_label.place_forget()
@@ -289,6 +288,7 @@ class UserBoardMenu:
 
     def on_transfer_validate_click(self):
         result = self.master.transaction.check_transfer(self.desc.get(), self.amount_entry.get(), self.category_option.get(), "transaction", self.actual_account, self.transfer_from_options.get(), self.transfer_to_options.get(), self.accounts)
+        self.error_label.place(relx = 0.5, rely = 0.1, anchor= ctk.CENTER)
 
         match result:
             case "missing_fields":
