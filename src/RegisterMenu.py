@@ -1,10 +1,9 @@
 import customtkinter as ctk
-from src.Ui import Ui
+
 from src.UserBoardMenu import UserBoardMenu
 
-class RegisterMenu(Ui):
+class RegisterMenu:
     def __init__(self, master):
-        super().__init__()
         self.master = master
         
     def menu(self):

@@ -1,11 +1,11 @@
 import customtkinter as ctk
-from src.Ui import Ui
+
 from src.LoginMenu import LoginMenu
 from src.RegisterMenu import RegisterMenu
 from src.Auth import Auth
 from src.DataManagement import DataManagement
 
-class App(Ui):
+class App(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.auth = Auth(self)
@@ -13,7 +13,15 @@ class App(Ui):
         self.actual_user = {}
         self.login_menu = LoginMenu(self)
         self.register_menu = RegisterMenu(self)
+        self.geometry("800x600")
+        self.title("Budget Buddy")
+        self.current_frame = None
         self.menu()
+
+    def clear_frame(self):
+        if self.current_frame is not None:
+            self.current_frame.destroy()
+            self.current_frame = None
 
     def menu(self):
         self.clear_frame()
@@ -25,5 +33,3 @@ class App(Ui):
         self.current_frame.place(relx=0.5, rely=0.5, anchor= ctk.CENTER)
         self.button_login.place(relx = 0.5, y = 50, anchor= ctk.CENTER)
         self.button_register.place(relx = 0.5, y = 100, anchor= ctk.CENTER)
-        
-

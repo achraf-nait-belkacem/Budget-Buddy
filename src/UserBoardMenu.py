@@ -1,9 +1,7 @@
 import customtkinter as ctk
-from src.Ui import Ui
 
-class UserBoardMenu(Ui):
+class UserBoardMenu:
     def __init__(self, master, actual_user):
-        super().__init__()
         self.master = master
         self.user = actual_user
 
