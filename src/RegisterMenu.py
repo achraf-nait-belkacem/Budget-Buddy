@@ -55,7 +55,7 @@ class RegisterMenu:
                 self.master.current_frame.configure(width= 350)
 
             case "password_length_error":
-                self.error_label.configure(text="Enter at least a password with 8 or more characters")
+                self.error_label.configure(text="Enter at least a password with 10 or more characters")
                 self.master.current_frame.configure(width= 350)
 
             case "pasword_num_error":

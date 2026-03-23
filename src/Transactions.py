@@ -113,7 +113,7 @@ class Transactions():
             "date": transaction_date, 
             "type": trans_type, 
             "category": category, 
-            "account_id": current_account[0]
+            "account_id": trans_from[0]
         }
 
         transaction_data_to = {
@@ -122,7 +122,7 @@ class Transactions():
             "date": transaction_date,
             "type": trans_type, 
             "category": category, 
-            "account_id": current_account[0]
+            "account_id": trans_to[0]
         }
 
         new_balance_from = trans_from[2] - amount_float

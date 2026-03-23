@@ -72,7 +72,7 @@ class UserBoardMenu:
         self.transactions_history_box.configure(state="disabled")
         self.transactions_history_box.place(relx=0.5, rely=0.55, anchor=ctk.CENTER)
 
-        self.transaction_label.configure(text="Select Withdraw or Deposit")
+        self.transaction_label.configure(text="")
         self.transaction_label.place(relx=0.5, rely=0.2, anchor=ctk.CENTER)
 
         self.load_transaction_history()
